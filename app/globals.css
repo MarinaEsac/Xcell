@@ -1,0 +1,15 @@
+html,
+body {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+.linear-Gredint {
+  background: linear-gradient(to right bottom, #00292d 50%, #00222e 50%);
+}
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
