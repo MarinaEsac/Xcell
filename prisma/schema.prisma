@@ -1,0 +1,52 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model SheetCells {
+  id           String       @id @default(auto()) @map("_id") @db.ObjectId
+  colId        String?      @map("sheetColumns") @db.ObjectId
+  sheetColumns SheetColumns? @relation(fields: [colId], references: [id])
+  rowId        String? @map("sheetRows")       @db.ObjectId
+  sheetRows    SheetRows?    @relation(fields: [rowId], references: [id])
+  value        String
+  sheetId      String? @map("sheet")       @db.ObjectId
+  sheet        Sheet?        @relation(fields: [sheetId], references: [id])
+}
+
+model SheetColumns {
+  id         String       @id @default(auto()) @map("_id") @db.ObjectId
+  name       String
+  order      Int
+  sheetId    String       @db.ObjectId
+  sheet      Sheet        @relation(fields: [sheetId], references: [id], onDelete: Cascade)
+  SheetCells SheetCells[]
+}
+
+model SheetRows {
+  id         String       @id @default(auto()) @map("_id") @db.ObjectId
+  order      Int
+  sheetId    String       @db.ObjectId
+  sheet      Sheet        @relation(fields: [sheetId], references: [id])
+  SheetCells SheetCells[]
+}
+
+model Sheet {
+  id        String         @id @default(auto()) @map("_id") @db.ObjectId
+  cells     SheetCells[]
+  columns   SheetColumns[]
+  email     String
+  rows      SheetRows[]
+  sheetName String
+}
+
+model User {
+  id       String @id @default(auto()) @map("_id") @db.ObjectId
+  email    String @unique
+  password String?
+  username String
+}
